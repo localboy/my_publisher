@@ -4,7 +4,9 @@ from django.core.mail import send_mail
 from django.urls import reverse
 from django.db.models import signals
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
- 
+
+from main.tasks import send_verification_email
+
  
 class UserAccountManager(BaseUserManager):
     use_in_migrations = True
@@ -58,12 +60,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 def user_post_save(sender, instance, signal, *args, **kwargs):
     if not instance.is_verified:
-        send_mail(
-            'Verify your MyPublisher account',
-            'Follow this link to verify your account: http://localhost:8000%s' % reverse('verify', kwargs={'uuid': str(instance.verification_uuid)}),
-            'from@mypublisher.dev',
-            [instance.email],
-            fail_silently=False,
-        )
+        send_verification_email.delay(instance.pk)
 
 signals.post_save.connect(user_post_save, sender=User)

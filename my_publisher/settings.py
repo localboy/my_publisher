@@ -130,3 +130,10 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = '<GMAIL_USER_NAME>'
 EMAIL_HOST_PASSWORD = '<GMAIL_PASSWORD>'
 EMAIL_PORT = 587
+
+# REDIS related settings 
+REDIS_HOST = 'localhost'
+REDIS_PORT = '6379'
+BROKER_URL = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600} 
+CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
