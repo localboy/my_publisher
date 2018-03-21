@@ -17,8 +17,11 @@ from django.contrib import admin
 from django.urls import path, re_path
 
 from publish.views import view_post
+from main.views import home, verify
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    re_path(r'^(?P<slug>[a-zA-Z0-9\-]+)', view_post, name='view_post')
+    re_path(r'^verify/(?P<uuid>[a-z0-9\-]+)/', verify, name='verify'),
+    re_path(r'^(?P<slug>[a-zA-Z0-9\-]+)', view_post, name='view_post'),
+    path('', home, name='home'),
 ]
